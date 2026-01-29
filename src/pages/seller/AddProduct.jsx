@@ -185,7 +185,7 @@ export default function AddProduct({ setActiveTab, editingProduct, setEditingPro
       const finalImages = await Promise.all(productImages.map(img => urlToBase64(img)));
       const finalThumbnail = thumbnailImage ? await urlToBase64(thumbnailImage) : null;
       const payload = { sellerId: seller._id, name: title, category, subcategory, price, description, images: finalImages, thumbnail: finalThumbnail };
-      const url = editingProduct ? `http://localhost:5050/update-product/${editingProduct._id}` : "http://localhost:5050/add-product";
+      const url = editingProduct ? `https://nursreyhubbackend.vercel.app/update-product/${editingProduct._id}` : "https://nursreyhubbackend.vercel.app/add-product";
       const method = editingProduct ? "put" : "post";
       await axios({ url, method, data: payload, headers: { "Content-Type": "application/json" } });
       alert("Success!");

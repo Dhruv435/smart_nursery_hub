@@ -29,7 +29,7 @@ const History = () => {
 
   const fetchHistory = async () => {
     try {
-      const res = await axios.get(`http://localhost:5050/user-history/${currentUser._id}`);
+      const res = await axios.get(`https://nursreyhubbackend.vercel.app/user-history/${currentUser._id}`);
       setBids(res.data);
       setLoading(false);
     } catch (err) {
@@ -42,7 +42,7 @@ const History = () => {
     if (!window.confirm("Remove this item from your history?")) return;
 
     try {
-      await axios.post("http://localhost:5050/history/delete", {
+      await axios.post("https://nursreyhubbackend.vercel.app/history/delete", {
         bidId,
         userId: currentUser._id
       });

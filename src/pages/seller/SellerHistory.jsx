@@ -34,7 +34,7 @@ const SellerHistory = () => {
 
   const fetchHistory = async (sellerId) => {
     try {
-      const res = await axios.get(`http://localhost:5050/user-history/${sellerId}`);
+      const res = await axios.get(`https://nursreyhubbackend.vercel.app/user-history/${sellerId}`);
       setHistory(res.data);
       setFilteredHistory(res.data);
       const uniqueProducts = ["All", ...new Set(res.data.map(item => item.productName))];
@@ -49,7 +49,7 @@ const SellerHistory = () => {
   const handleDelete = async (bidId) => {
     if (!window.confirm("Archiving this record will remove it from your studio ledger. Proceed?")) return;
     try {
-      await axios.post("http://localhost:5050/history/delete", {
+      await axios.post("https://nursreyhubbackend.vercel.app/history/delete", {
         bidId,
         userId: seller._id
       });

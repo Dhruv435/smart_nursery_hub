@@ -17,14 +17,14 @@ const Portfolio = () => {
     const fetchData = async () => {
       try {
         // 1. Try to fetch full portfolio (Seller + Products)
-        const res = await axios.get(`http://localhost:5050/seller-portfolio-public/${sellerId}`);
+        const res = await axios.get(`https://nursreyhubbackend.vercel.app/seller-portfolio-public/${sellerId}`);
         setData(res.data);
       } catch (err) {
         console.warn("Seller profile not found, trying to fetch products only...");
         
         // 2. If Seller not found (404), try fetching just the products
         try {
-            const productRes = await axios.get(`http://localhost:5050/seller-products-public/${sellerId}`);
+            const productRes = await axios.get(`https://nursreyhubbackend.vercel.app/seller-products-public/${sellerId}`);
             
             // Create a "Dummy" seller object so the page still renders
             setData({

@@ -29,8 +29,8 @@ const ViewBids = () => {
     const buyer = JSON.parse(localStorage.getItem("buyer"));
     let url = "";
 
-    if (seller) { url = `http://localhost:5050/seller-bids/${seller._id}`; setRole("seller"); }
-    else if (buyer) { url = `http://localhost:5050/user-history/${buyer._id}`; setRole("buyer"); }
+    if (seller) { url = `https://nursreyhubbackend.vercel.app/seller-bids/${seller._id}`; setRole("seller"); }
+    else if (buyer) { url = `https://nursreyhubbackend.vercel.app/user-history/${buyer._id}`; setRole("buyer"); }
     else { setLoading(false); return; }
 
     try {
@@ -47,7 +47,7 @@ const ViewBids = () => {
 
   const handleChatOnly = async (bid) => {
     try {
-      const res = await axios.post("http://localhost:5050/chat/accept-bid", {
+      const res = await axios.post("https://nursreyhubbackend.vercel.app/chat/accept-bid", {
         bidId: bid._id, sellerId: bid.sellerId, buyerId: bid.buyerId, productName: bid.productName
       });
       navigate("/chat", { state: { chatId: res.data._id } });
@@ -58,7 +58,7 @@ const ViewBids = () => {
     const seller = JSON.parse(localStorage.getItem("seller"));
     if (!window.confirm(`Finalize settlement of ₹${bid.bidAmount} with ${bid.buyerName}?`)) return;
     try {
-      await axios.post("http://localhost:5050/sell/confirm", {
+      await axios.post("https://nursreyhubbackend.vercel.app/sell/confirm", {
         bidId: bid._id, sellerId: seller._id, buyerId: bid.buyerId, productName: bid.productName
       });
       fetchBids();

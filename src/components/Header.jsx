@@ -39,7 +39,7 @@ const Header = () => {
     }
     try {
       const endpoint = role === "seller" ? "/seller/signup" : "/buyer/signup"
-      const res = await axios.post(`http://localhost:5050${endpoint}`, form)
+      const res = await axios.post(`https://nursreyhubbackend.vercel.app${endpoint}`, form)
       localStorage.setItem(role, JSON.stringify(res.data.user))
       setUser({ data: res.data.user, role: role })
       setOpen(false)

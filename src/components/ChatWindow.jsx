@@ -16,7 +16,7 @@ const PaymentModal = ({ bidId, onClose, onSuccess }) => {
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const res = await axios.get(`http://localhost:5050/payment/bid-details/${bidId}`);
+        const res = await axios.get(`https://nursreyhubbackend.vercel.app/payment/bid-details/${bidId}`);
         setAmount(res.data.bidAmount);
         setLoadingDetails(false);
       } catch (err) {
@@ -34,7 +34,7 @@ const PaymentModal = ({ bidId, onClose, onSuccess }) => {
     // Simulate Bank Delay (2 seconds)
     setTimeout(async () => {
       try {
-        await axios.post("http://localhost:5050/payment/complete", {
+        await axios.post("https://nursreyhubbackend.vercel.app/payment/complete", {
           bidId,
           method
         });
@@ -201,14 +201,14 @@ const ChatWindow = ({ onClose, currentUserId }) => {
 
   const fetchChatList = async () => {
     try {
-      const res = await axios.get(`http://localhost:5050/chat/list/${currentUserId}`);
+      const res = await axios.get(`https://nursreyhubbackend.vercel.app/chat/list/${currentUserId}`);
       setChats(res.data);
     } catch (err) { console.error(err); }
   };
 
   const fetchMessages = async (chatId) => {
     try {
-      const res = await axios.get(`http://localhost:5050/chat/${chatId}?userId=${currentUserId}`);
+      const res = await axios.get(`https://nursreyhubbackend.vercel.app/chat/${chatId}?userId=${currentUserId}`);
       setMessages(res.data.messages);
     } catch (err) { console.error(err); }
   };
@@ -218,7 +218,7 @@ const ChatWindow = ({ onClose, currentUserId }) => {
     if (!newMessage.trim() || !activeChat) return;
 
     try {
-      await axios.post("http://localhost:5050/chat/send", {
+      await axios.post("https://nursreyhubbackend.vercel.app/chat/send", {
         chatId: activeChat._id,
         senderId: currentUserId,
         text: newMessage
@@ -233,7 +233,7 @@ const ChatWindow = ({ onClose, currentUserId }) => {
     if (!window.confirm("Clear this chat for yourself?")) return;
 
     try {
-      await axios.post("http://localhost:5050/chat/clear", {
+      await axios.post("https://nursreyhubbackend.vercel.app/chat/clear", {
         chatId: activeChat._id,
         userId: currentUserId
       });

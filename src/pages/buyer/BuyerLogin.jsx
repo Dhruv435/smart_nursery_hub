@@ -22,7 +22,7 @@ const BuyerLogin = () => {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5050/buyer/login", {
+      const res = await axios.post("https://nursreyhubbackend.vercel.app/buyer/login", {
         username,
         password
       });

@@ -32,7 +32,7 @@ const BidPage = () => {
 
   const fetchProduct = async () => {
     try {
-      const res = await axios.get(`http://localhost:5050/product/${productId}`);
+      const res = await axios.get(`https://nursreyhubbackend.vercel.app/product/${productId}`);
       setProduct(res.data);
       setLoadingProduct(false);
     } catch (err) {

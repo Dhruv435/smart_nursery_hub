@@ -38,7 +38,7 @@ function App() {
   useEffect(() => {
     const prefetch = async () => {
       try {
-        await axios.get("http://localhost:5050/all-products");
+        await axios.get("https://nursreyhubbackend.vercel.app/all-products");
         // Buffering slightly for a premium feel
         setTimeout(() => setDataLoaded(true), 1200);
       } catch (err) {

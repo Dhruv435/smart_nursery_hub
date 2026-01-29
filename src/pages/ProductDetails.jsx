@@ -39,16 +39,16 @@ const ProductDetails = () => {
   const fetchData = async () => {
     try {
       // 1. Fetch Product
-      const productRes = await axios.get(`http://localhost:5050/product/${id}`);
+      const productRes = await axios.get(`https://nursreyhubbackend.vercel.app/product/${id}`);
       setProduct(productRes.data);
 
       // 2. Fetch Bids
-      const bidsRes = await axios.get(`http://localhost:5050/product-bids/${id}`);
+      const bidsRes = await axios.get(`https://nursreyhubbackend.vercel.app/product-bids/${id}`);
       setBids(bidsRes.data);
 
       // 3. Fetch All Products from this Seller
       if (productRes.data && productRes.data.sellerId) {
-        const moreRes = await axios.get(`http://localhost:5050/seller-products-public/${productRes.data.sellerId}`);
+        const moreRes = await axios.get(`https://nursreyhubbackend.vercel.app/seller-products-public/${productRes.data.sellerId}`);
         setSellerProducts(moreRes.data);
       }
 

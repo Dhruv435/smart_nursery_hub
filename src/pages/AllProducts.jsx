@@ -39,7 +39,7 @@ const AllProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:5050/all-products");
+      const res = await axios.get("https://nursreyhubbackend.vercel.app/all-products");
       setProducts(res.data);
     } catch (err) {
       console.error(err);

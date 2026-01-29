@@ -121,7 +121,7 @@ export default function SupportChatBot({ onBackToFAQ }) {
         }
         setIsTyping(true);
         try {
-            const res = await axios.post("http://localhost:5050/api/user-details", { username: currentUser.username });
+            const res = await axios.post("https://nursreyhubbackend.vercel.app/api/user-details", { username: currentUser.username });
             const data = res.data;
             const detailsMsg = (
                 <div className="w-full text-left space-y-4">
@@ -169,14 +169,14 @@ export default function SupportChatBot({ onBackToFAQ }) {
     setIsTyping(true); setInputMode(null);
     if (inputMode === "recover") {
         try {
-            const res = await axios.post("http://localhost:5050/api/recover-password", formData);
+            const res = await axios.post("https://nursreyhubbackend.vercel.app/api/recover-password", formData);
             if (res.data.success) handleBotMessage("START", `Identity Verified. ✅ Access Key retrieved: **${res.data.password}**`);
             else handleBotMessage("START", "❌ Verification Failed. Data mismatch identified.");
         } catch (err) { handleBotMessage("START", "Protocol error. Try again."); }
     }
     if (inputMode === "delete") {
         try {
-            const res = await axios.post("http://localhost:5050/api/delete-account", { username: currentUser.username, password: formData.password });
+            const res = await axios.post("https://nursreyhubbackend.vercel.app/api/delete-account", { username: currentUser.username, password: formData.password });
             if (res.data.success) {
                 handleBotMessage("START", "✅ Account De-archived. Terminating session...");
                 setTimeout(() => { localStorage.clear(); window.location.href = "/"; }, 3000);

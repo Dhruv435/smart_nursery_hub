@@ -16,7 +16,7 @@ const PaymentModal = ({ bidId, onClose, onSuccess }) => {
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const res = await axios.get(`http://localhost:5050/payment/bid-details/${bidId}`);
+        const res = await axios.get(`https://nursreyhubbackend.vercel.app/payment/bid-details/${bidId}`);
         setAmount(res.data.bidAmount);
         setLoadingDetails(false);
       } catch (err) {
@@ -32,7 +32,7 @@ const PaymentModal = ({ bidId, onClose, onSuccess }) => {
     
     setTimeout(async () => {
       try {
-        await axios.post("http://localhost:5050/payment/complete", {
+        await axios.post("https://nursreyhubbackend.vercel.app/payment/complete", {
           bidId,
           method
         });
@@ -218,7 +218,7 @@ const ChatPage = () => {
   const fetchChatList = async (userId, showLoading = true) => {
     try {
       if(showLoading) setLoading(true);
-      const res = await axios.get(`http://localhost:5050/chat/list/${userId}`);
+      const res = await axios.get(`https://nursreyhubbackend.vercel.app/chat/list/${userId}`);
       setChats(res.data);
       if(showLoading) setLoading(false);
     } catch (err) {
@@ -229,7 +229,7 @@ const ChatPage = () => {
 
   const fetchSingleChat = async (chatId) => {
     try {
-      const res = await axios.get(`http://localhost:5050/chat/${chatId}?userId=${currentUser._id}`);
+      const res = await axios.get(`https://nursreyhubbackend.vercel.app/chat/${chatId}?userId=${currentUser._id}`);
       const chatData = res.data;
       
       const fullChatObj = {
@@ -246,7 +246,7 @@ const ChatPage = () => {
 
   const refreshMessages = async (chatId) => {
     try {
-      const res = await axios.get(`http://localhost:5050/chat/${chatId}?userId=${currentUser._id}`);
+      const res = await axios.get(`https://nursreyhubbackend.vercel.app/chat/${chatId}?userId=${currentUser._id}`);
       if (res.data.messages.length !== messages.length) {
         setMessages(res.data.messages);
       }
@@ -269,7 +269,7 @@ const ChatPage = () => {
     setNewMessage("");
 
     try {
-      await axios.post("http://localhost:5050/chat/send", {
+      await axios.post("https://nursreyhubbackend.vercel.app/chat/send", {
         chatId: activeChat._id,
         senderId: currentUser._id,
         text: tempMsg.text

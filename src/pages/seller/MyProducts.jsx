@@ -15,7 +15,7 @@ const MyProducts = ({ onEdit }) => {
 
   const fetchMyProducts = async () => {
     try {
-      const res = await axios.get(`http://localhost:5050/my-products/${seller._id}`);
+      const res = await axios.get(`https://nursreyhubbackend.vercel.app/my-products/${seller._id}`);
       setProducts(res.data);
     } catch (err) {
       console.error(err);
@@ -27,7 +27,7 @@ const MyProducts = ({ onEdit }) => {
   const handleDelete = async (productId) => {
     if (!window.confirm("Archiving this specimen will remove it from the public archive. Proceed?")) return;
     try {
-      await axios.delete(`http://localhost:5050/delete-product/${productId}`);
+      await axios.delete(`https://nursreyhubbackend.vercel.app/delete-product/${productId}`);
       setProducts(products.filter((p) => p._id !== productId));
     } catch { alert("Action failed"); }
   };

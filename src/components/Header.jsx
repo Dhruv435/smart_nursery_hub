@@ -9,8 +9,8 @@ import {
 } from "lucide-react" 
 
 const Header = () => {
-  const [open, setOpen] = useState(false) // Signup Modal
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false) // Hamburger Menu
+  const [open, setOpen] = useState(false) 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false) 
   const [hoverProfile, setHoverProfile] = useState(false)
   const [step, setStep] = useState("role")
   const [user, setUser] = useState(null)
@@ -28,7 +28,10 @@ const Header = () => {
 
   useEffect(() => {
     if (open && modalRef.current) {
-      gsap.fromTo(modalRef.current, { scale: 0.9, opacity: 0, y: 30 }, { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "expo.out" })
+      gsap.fromTo(modalRef.current, 
+        { scale: 0.9, opacity: 0, y: 30 }, 
+        { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }
+      )
     }
   }, [open])
 
@@ -92,18 +95,18 @@ const Header = () => {
               <NavLink label="Archive" icon={ShoppingBag} onClick={() => navigate("/products")} />
               <NavLink label="About" icon={Info} onClick={() => navigate("/about")} />
               <NavLink label="Support" icon={LifeBuoy} onClick={() => navigate("/support")} />
+              <NavLink label="Chat" icon={MessageCircle} onClick={() => navigate("/chat")} />
+              <NavLink label="Profile" icon={User} onClick={() => navigate("/seller/profile")} />
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            {/* DESKTOP ACTIONS */}
             <div className="hidden lg:flex items-center gap-4">
               {user?.data && (
                 <motion.button 
                   whileHover={{ scale: 1.1 }} 
                   className="p-2.5 rounded-2xl hover:bg-emerald-50 text-stone-600 hover:text-emerald-700 transition-all" 
                   onClick={() => navigate("/chat")}
-                  title="Messages"
                 >
                   <MessageCircle size={22} />
                 </motion.button>
@@ -126,7 +129,6 @@ const Header = () => {
               )}
             </div>
 
-            {/* PROFILE / JOIN BUTTON */}
             {user?.data ? (
               <div className="relative hidden lg:block" onMouseEnter={() => setHoverProfile(true)} onMouseLeave={() => setHoverProfile(false)}>
                  <motion.div onClick={() => navigate("/seller/profile")} className="w-11 h-11 rounded-full overflow-hidden border-2 border-emerald-100 bg-emerald-50 flex items-center justify-center cursor-pointer shadow-md">
@@ -159,7 +161,6 @@ const Header = () => {
           </div>
         </div>
 
-        {/* MOBILE MENU - SHUTTER DOWN ANIMATION */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <>
@@ -168,7 +169,6 @@ const Header = () => {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="fixed inset-0 top-20 bg-stone-900/20 backdrop-blur-sm z-80 lg:hidden"
               />
-              
               <motion.div 
                 initial={{ scaleY: 0, opacity: 0 }} 
                 animate={{ scaleY: 1, opacity: 1 }} 
@@ -181,17 +181,19 @@ const Header = () => {
                   <NavLink mobile label="Archive" icon={ShoppingBag} onClick={() => {navigate("/products"); setIsMobileMenuOpen(false);}} />
                   <NavLink mobile label="About" icon={Info} onClick={() => {navigate("/about"); setIsMobileMenuOpen(false);}} />
                   <NavLink mobile label="Support" icon={LifeBuoy} onClick={() => {navigate("/support"); setIsMobileMenuOpen(false);}} />
+                  <NavLink mobile label="Chat" icon={MessageCircle} onClick={() => {navigate("/chat"); setIsMobileMenuOpen(false);}} />
+                  <NavLink mobile label="Profile" icon={User} onClick={() => {navigate("/seller/profile"); setIsMobileMenuOpen(false);}} />
                   
-                  {user?.data ? (
+                  {user?.data && (
                     <div className="mt-4 pt-4 border-t border-stone-100 space-y-1">
                       <div className="px-6 py-2 text-[9px] font-black uppercase tracking-[0.3em] text-emerald-600">Member Space</div>
-                      <NavLink mobile label="Messages" icon={MessageCircle} onClick={() => {navigate("/chat"); setIsMobileMenuOpen(false);}} />
-                      <NavLink mobile label="My Profile" icon={User} onClick={() => {navigate("/seller/profile"); setIsMobileMenuOpen(false);}} />
                       {user?.role === "seller" && <NavLink mobile label="Studio Dashboard" icon={LayoutDashboard} onClick={() => {navigate("/seller/dashboard"); setIsMobileMenuOpen(false);}} />}
                       <NavLink mobile label="Activity History" icon={HistoryIcon} onClick={() => {navigate("/history"); setIsMobileMenuOpen(false);}} />
                       {user?.role === "seller" && <NavLink mobile label="Bids Received" icon={Gavel} onClick={() => {navigate("/view-bids"); setIsMobileMenuOpen(false);}} />}
                     </div>
-                  ) : (
+                  )}
+
+                  {!user?.data && (
                     <div className="p-6 pt-8">
                       <button 
                         onClick={() => { setStep("role"); setOpen(true); setIsMobileMenuOpen(false); }} 
@@ -219,7 +221,6 @@ const Header = () => {
         </AnimatePresence>
       </nav>
 
-      {/* SIGNUP MODAL */}
       <AnimatePresence>
         {open && (
           <motion.div className="fixed inset-0 bg-stone-900/60 backdrop-blur-md flex items-center justify-center z-[110] p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)}>

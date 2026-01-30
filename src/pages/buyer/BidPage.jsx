@@ -20,7 +20,6 @@ const BidPage = () => {
   const [bidAmount, setBidAmount] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [focusedInput, setFocusedInput] = useState(null);
 
   useEffect(() => {
     if (!product && productId) {
@@ -53,18 +52,20 @@ const BidPage = () => {
       return;
     }
 
-    if (!product.sellerId) {
-        alert("Error: Missing seller information.");
+    if (!product || !product.sellerId) {
+        alert("Error: Missing product or seller information.");
         return;
     }
 
     if (parseFloat(bidAmount) < product.price) {
+      alert(`Bid must be at least ₹${product.price}`);
       return;
     }
 
     setLoading(true);
     try {
-      await axios.post("https://nursery-backend-ashy.vercel.app/place-bid", {
+      // Corrected URL to match your working fetch URL
+      await axios.post("https://nursreyhubbackend.vercel.app/place-bid", {
         productId: product._id,
         productName: product.name,
         productImage: product.images && product.images.length > 0 ? product.images[0] : "",
@@ -78,7 +79,8 @@ const BidPage = () => {
       alert("✅ Bid Placed Successfully!");
       navigate("/history");
     } catch (err) {
-      alert("Failed to place bid.");
+      console.error("Bid Error:", err);
+      alert("Failed to place bid. Please check your connection.");
     } finally {
       setLoading(false);
     }
@@ -97,7 +99,6 @@ const BidPage = () => {
     <div className="min-h-screen bg-[#faf9f6] flex flex-col font-sans selection:bg-emerald-200 overflow-x-hidden">
       <Header />
       
-      {/* Background Architectural Blurs */}
       <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-emerald-50 rounded-full blur-[120px] -z-10 opacity-60"></div>
       <div className="fixed bottom-0 left-0 w-[400px] h-[400px] bg-stone-100 rounded-full blur-[100px] -z-10 opacity-50"></div>
 
@@ -109,7 +110,6 @@ const BidPage = () => {
           className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 bg-white rounded-[3.5rem] shadow-2xl shadow-stone-200/60 overflow-hidden border border-white relative"
         >
           
-          {/* ==================== LEFT: VISUAL VAULT ==================== */}
           <div className="lg:col-span-5 relative group overflow-hidden bg-stone-950 min-h-[400px] lg:min-h-[700px]">
             <motion.img 
               initial={{ scale: 1.2 }}
@@ -121,7 +121,6 @@ const BidPage = () => {
             
             <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-900/20 to-transparent"></div>
 
-            {/* Cinematic Badges */}
             <div className="absolute top-10 left-10 flex flex-col gap-3">
                 <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-5 py-2 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-2">
                     <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
@@ -129,7 +128,6 @@ const BidPage = () => {
                 </div>
             </div>
 
-            {/* Product Metadata Overlay */}
             <div className="absolute bottom-12 left-12 right-12 text-white">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
@@ -156,10 +154,8 @@ const BidPage = () => {
             </div>
           </div>
 
-          {/* ==================== RIGHT: BIDDING TERMINAL ==================== */}
           <div className="lg:col-span-7 p-10 md:p-20 flex flex-col bg-white">
             
-            {/* Header Controls */}
             <div className="flex justify-between items-center mb-16">
                <button 
                  onClick={() => navigate(-1)} 
@@ -186,7 +182,6 @@ const BidPage = () => {
 
             <form onSubmit={handlePlaceBid} className="space-y-12">
               
-              {/* Offer Input */}
               <div className="group">
                 <label className="text-[10px] font-black text-stone-400 uppercase tracking-[0.3em] mb-4 block group-focus-within:text-emerald-600 transition-colors">
                   Your Proposed Value (₹)
@@ -220,7 +215,6 @@ const BidPage = () => {
                 )}
               </div>
 
-              {/* Message Input */}
               <div className="group">
                 <label className="text-[10px] font-black text-stone-400 uppercase tracking-[0.3em] mb-4 block group-focus-within:text-emerald-600 transition-colors">
                   Acquisition Memo <span className="opacity-30 font-light italic text-[8px] ml-2">(Optional)</span>
@@ -233,7 +227,6 @@ const BidPage = () => {
                 />
               </div>
 
-              {/* Final Action */}
               <div className="pt-6">
                 <motion.button 
                   whileHover={{ scale: 1.02 }}
@@ -244,7 +237,7 @@ const BidPage = () => {
                 >
                     <span className="relative z-10 flex items-center justify-center gap-3">
                     {loading ? (
-                      <Loader2 size={18} className="animate-spin text-emerald-400" />
+                      <Zap size={18} className="animate-spin text-emerald-400" />
                     ) : (
                       <>
                         Initialize Bid <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -275,10 +268,5 @@ const BidPage = () => {
     </div>
   );
 };
-
-// Simple Loader icon helper
-const Loader2 = ({ size, className }) => (
-    <Zap size={size} className={className} />
-)
 
 export default BidPage;

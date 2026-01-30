@@ -2,19 +2,35 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Lock, ArrowLeft, Sprout, Loader2, Sparkles, ShieldCheck, ChevronRight, X } from "lucide-react";
+import { User, Lock, ArrowLeft, Sprout, Loader2, Sparkles, ShieldCheck, ChevronRight, X, Mail, Phone } from "lucide-react";
 
 const BuyerLogin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!username || !password) {
-      setError("Credentials required for archive access.");
+
+    // Validations
+    if (!username || !password || !email || !mobile) {
+      setError("All fields are required for archive access.");
+      return;
+    }
+
+    // Gmail Validation
+    if (!email.toLowerCase().endsWith("@gmail.com")) {
+      setError("Authorized access requires a @gmail.com address.");
+      return;
+    }
+
+    // Mobile Validation (Exactly 10 digits)
+    if (!/^\d{10}$/.test(mobile)) {
+      setError("Mobile protocol requires exactly 10 numeric digits.");
       return;
     }
 
@@ -24,7 +40,9 @@ const BuyerLogin = () => {
     try {
       const res = await axios.post("https://nursreyhubbackend.vercel.app/buyer/login", {
         username,
-        password
+        password,
+        email,
+        mobile
       });
 
       localStorage.setItem("buyer", JSON.stringify(res.data.user));
@@ -33,6 +51,14 @@ const BuyerLogin = () => {
       setError("Invalid credentials. Access denied.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Helper to restrict mobile input to numbers and max 10 length
+  const handleMobileChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ""); // Remove non-digits
+    if (value.length <= 10) {
+      setMobile(value);
     }
   };
 
@@ -50,7 +76,6 @@ const BuyerLogin = () => {
           className="absolute inset-0 w-full h-full object-cover"
         />
         
-        {/* Architectural Gradient Overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-900/20 to-transparent"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.15)_0%,transparent_50%)]"></div>
 
@@ -98,15 +123,14 @@ const BuyerLogin = () => {
       </div>
 
       {/* ==================== RIGHT: MINIMALIST FORM SIDE ==================== */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-24 bg-[#faf9f6]">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-24 bg-[#faf9f6] overflow-y-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full max-w-md"
+          className="w-full max-w-md py-10"
         >
-          {/* Top Interface Controls */}
-          <div className="flex justify-between items-center mb-20">
+          <div className="flex justify-between items-center mb-10">
               <button 
                 onClick={() => navigate("/")} 
                 className="flex items-center text-stone-400 hover:text-stone-900 transition-all font-black uppercase tracking-widest text-[10px] group"
@@ -119,13 +143,12 @@ const BuyerLogin = () => {
               </div>
           </div>
 
-          <div className="space-y-12">
+          <div className="space-y-10">
             <div>
               <h2 className="text-5xl font-serif text-stone-900 mb-4 tracking-tight">Identity <span className="italic text-stone-400">Sync.</span></h2>
               <p className="text-stone-500 font-light text-lg leading-relaxed">Please authenticate to access your personal collection archive.</p>
             </div>
 
-            {/* Error Message */}
             <AnimatePresence>
               {error && (
                 <motion.div 
@@ -140,8 +163,8 @@ const BuyerLogin = () => {
               )}
             </AnimatePresence>
 
-            <form onSubmit={handleLogin} className="space-y-10">
-              {/* Username Input */}
+            <form onSubmit={handleLogin} className="space-y-8">
+              {/* Alias Input */}
               <div className="group">
                 <label className="text-[10px] font-black text-stone-400 uppercase tracking-[0.3em] mb-4 block group-focus-within:text-emerald-600 transition-colors">Collector Alias</label>
                 <div className="relative border-b border-stone-200 group-focus-within:border-emerald-500 transition-all pb-2">
@@ -151,6 +174,36 @@ const BuyerLogin = () => {
                     placeholder="Enter username" 
                     value={username}
                     onChange={(e) => setUsername(e.target.value)} 
+                  />
+                </div>
+              </div>
+
+              {/* Email Input */}
+              <div className="group">
+                <label className="text-[10px] font-black text-stone-400 uppercase tracking-[0.3em] mb-4 block group-focus-within:text-emerald-600 transition-colors">Registry Email</label>
+                <div className="relative border-b border-stone-200 group-focus-within:border-emerald-500 transition-all pb-2">
+                  <Mail className="absolute left-0 top-1/2 -translate-y-1/2 text-stone-300 group-focus-within:text-emerald-500 transition-colors" size={18} />
+                  <input 
+                    type="email"
+                    className="w-full pl-10 pr-4 py-3 bg-transparent focus:outline-none text-stone-800 font-serif text-2xl placeholder:text-stone-200" 
+                    placeholder="name@gmail.com" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)} 
+                  />
+                </div>
+              </div>
+
+              {/* Mobile Input */}
+              <div className="group">
+                <label className="text-[10px] font-black text-stone-400 uppercase tracking-[0.3em] mb-4 block group-focus-within:text-emerald-600 transition-colors">Mobile Index</label>
+                <div className="relative border-b border-stone-200 group-focus-within:border-emerald-500 transition-all pb-2">
+                  <Phone className="absolute left-0 top-1/2 -translate-y-1/2 text-stone-300 group-focus-within:text-emerald-500 transition-colors" size={18} />
+                  <input 
+                    type="tel"
+                    className="w-full pl-10 pr-4 py-3 bg-transparent focus:outline-none text-stone-800 font-serif text-2xl placeholder:text-stone-200" 
+                    placeholder="10 digit number" 
+                    value={mobile}
+                    onChange={handleMobileChange} 
                   />
                 </div>
               </div>
@@ -170,7 +223,6 @@ const BuyerLogin = () => {
                 </div>
               </div>
 
-              {/* Action Button */}
               <motion.button 
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
